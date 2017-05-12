@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Foursquare Search</string>
+    <string name="hint_text_not_ready">wait, getting location</string>
+    <string name="hint_text_ready">enter search criteria</string>
+    <string name="button_text">clear</string>
+</resources>
