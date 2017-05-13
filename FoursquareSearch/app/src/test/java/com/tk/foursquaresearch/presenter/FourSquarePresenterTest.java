@@ -6,11 +6,11 @@ import com.tk.foursquaresearch.model.FourSquareModel;
 import com.tk.foursquaresearch.model.FourSquareModelFactory;
 import com.tk.foursquaresearch.model.FourSquareModelFactoryInterface;
 import com.tk.foursquaresearch.model.FourSquareModelListener;
-import com.tk.foursquaresearch.presenter.util.JsonHelper;
 import com.tk.foursquaresearch.view.FourSquareViewInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -26,13 +26,24 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class FourSquarePresenterTest {
+
+    FourSquareModelFactory mockModelFactory = null;
+    Context mockContext = null;
+    FourSquarePresenterFactory mockFactory = null;
+    FourSquareModel mockModel = null;
+    FourSquareViewInterface mockView = null;
+
+    @Before
+    public void initializeTest() {
+        mockModelFactory = mock(FourSquareModelFactory.class);
+        mockContext = mock(Context.class);
+        mockFactory = mock(FourSquarePresenterFactory.class);
+        mockModel = mock(FourSquareModel.class);
+        mockView = mock(FourSquareViewInterface.class);
+    }
+
     @Test
     public void testConstruct()  {
-        Context mockContext = mock(Context.class);
-        FourSquarePresenterFactory mockFactory = mock(FourSquarePresenterFactory.class);
-        FourSquareModel mockModel = mock(FourSquareModel.class);
-        FourSquareModelFactory mockModelFactory = mock(FourSquareModelFactory.class);
-
         when(mockFactory.fourSquareModelInstance(any(FourSquareModelFactoryInterface.class),anyString(),anyString(),any(FourSquareModelListener.class))).thenReturn(mockModel);
         when(mockFactory.fourSquareModelFactoryInstance()).thenReturn(mockModelFactory);
         when(mockModel.isReady()).thenReturn(false);
@@ -43,11 +54,6 @@ public class FourSquarePresenterTest {
 
     @Test
     public void testSearch()  {
-        Context mockContext = mock(Context.class);
-        FourSquarePresenterFactory mockFactory = mock(FourSquarePresenterFactory.class);
-        FourSquareModel mockModel = mock(FourSquareModel.class);
-        FourSquareModelFactory mockModelFactory = mock(FourSquareModelFactory.class);
-
         when(mockFactory.fourSquareModelInstance(any(FourSquareModelFactoryInterface.class),anyString(),anyString(),any(FourSquareModelListener.class))).thenReturn(mockModel);
         when(mockFactory.fourSquareModelFactoryInstance()).thenReturn(mockModelFactory);
         when(mockModel.isReady()).thenReturn(true);
@@ -61,12 +67,6 @@ public class FourSquarePresenterTest {
 
     @Test
     public void testOnSuccessEmpty()  {
-        Context mockContext = mock(Context.class);
-        FourSquarePresenterFactory mockFactory = mock(FourSquarePresenterFactory.class);
-        FourSquareModel mockModel = mock(FourSquareModel.class);
-        FourSquareModelFactory mockModelFactory = mock(FourSquareModelFactory.class);
-        FourSquareViewInterface mockView = mock(FourSquareViewInterface.class);
-        mock(JsonHelper.class);
         JSONObject mockJsonObject = mock(JSONObject.class);
         JSONArray mockJsonArray = mock(JSONArray.class);
 
@@ -92,12 +92,6 @@ public class FourSquarePresenterTest {
 
     @Test
     public void testOnSuccessOneHit()  {
-        Context mockContext = mock(Context.class);
-        FourSquarePresenterFactory mockFactory = mock(FourSquarePresenterFactory.class);
-        FourSquareModel mockModel = mock(FourSquareModel.class);
-        FourSquareModelFactory mockModelFactory = mock(FourSquareModelFactory.class);
-        FourSquareViewInterface mockView = mock(FourSquareViewInterface.class);
-        mock(JsonHelper.class);
         JSONObject mockJsonObject = mock(JSONObject.class);
         JSONArray mockJsonArray = mock(JSONArray.class);
         JSONObject mockJsonHit1Object = mock(JSONObject.class);
@@ -129,5 +123,33 @@ public class FourSquarePresenterTest {
         assertEquals("name 1", hit.get("name"));
         assertEquals("road 1", hit.get("address"));
         assertEquals("5551", hit.get("distance"));
+    }
+
+    @Test
+    public void testLocationError() {
+        when(mockFactory.fourSquareModelInstance(any(FourSquareModelFactoryInterface.class),anyString(),anyString(),any(FourSquareModelListener.class))).thenReturn(mockModel);
+        when(mockFactory.fourSquareModelFactoryInstance()).thenReturn(mockModelFactory);
+        when(mockModel.isReady()).thenReturn(true);
+
+        FourSquarePresenter presenter = new FourSquarePresenter(mockContext, mockFactory);
+        presenter.setView(mockView);
+        assertEquals(presenter.isReady(), true);
+
+        presenter.onLocationError();
+        verify(mockView, times(1)).displayLocationError();
+    }
+
+    @Test
+    public void tesNetworkError() {
+        when(mockFactory.fourSquareModelInstance(any(FourSquareModelFactoryInterface.class),anyString(),anyString(),any(FourSquareModelListener.class))).thenReturn(mockModel);
+        when(mockFactory.fourSquareModelFactoryInstance()).thenReturn(mockModelFactory);
+        when(mockModel.isReady()).thenReturn(true);
+
+        FourSquarePresenter presenter = new FourSquarePresenter(mockContext, mockFactory);
+        presenter.setView(mockView);
+        assertEquals(presenter.isReady(), true);
+
+        presenter.onNetworkError();
+        verify(mockView, times(1)).displayNetworkError();
     }
 }

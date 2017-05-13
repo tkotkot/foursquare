@@ -65,7 +65,7 @@ public class FourSquareModel implements SearchRequestListener, LocationHandlerIn
     }
 
     @Override
-    public void onSuccess(String body) {
+    public void onSearchSuccess(String body) {
         try {
             JSONObject obj = new JSONObject(body);
             listener.onSuccess(obj);
@@ -75,7 +75,7 @@ public class FourSquareModel implements SearchRequestListener, LocationHandlerIn
     }
 
     @Override
-    public void onError() {
+    public void onSearchError() {
         listener.onNetworkError();
     }
 

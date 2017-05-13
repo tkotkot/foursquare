@@ -10,7 +10,10 @@ import com.tk.foursquaresearch.model.util.SearchRequestListener;
 
 public interface FourSquareModelFactoryInterface {
 
+public interface FourSquareModelFactoryInterface {
     Location locationInstance();
     LocationHandler locationHandlerInstance(Context ctx, LocationHandlerInterface handlerListener);
     SearchRequest searchRequestInstance(SearchRequestListener listener);
+    OkHttpClient okHttpClientInstance();
+    Request requestInstance(String url);
 }

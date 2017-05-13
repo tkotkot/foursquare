@@ -5,6 +5,6 @@ package com.tk.foursquaresearch.model.util;
  */
 
 public interface SearchRequestListener {
-    public void onSuccess(String body);
-    public void onError();
+    public void onSearchSuccess(String body);
+    public void onSearchError();
 }
