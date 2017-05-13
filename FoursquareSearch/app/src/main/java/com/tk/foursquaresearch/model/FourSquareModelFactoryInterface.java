@@ -8,7 +8,8 @@ import com.tk.foursquaresearch.model.util.LocationHandlerInterface;
 import com.tk.foursquaresearch.model.util.SearchRequest;
 import com.tk.foursquaresearch.model.util.SearchRequestListener;
 
-public interface FourSquareModelFactoryInterface {
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public interface FourSquareModelFactoryInterface {
     Location locationInstance();
